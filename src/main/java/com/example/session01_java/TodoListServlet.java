@@ -20,22 +20,21 @@ public class TodoListServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String task = request.getParameter("task");
-        if (task != null && !task.isEmpty()) {
-            // Kiểm tra xem có yêu cầu đánh dấu hoàn thành không
-            String action = request.getParameter("action");
-            if ("complete".equals(action)) {
-                // Đánh dấu công việc là hoàn thành
-                for (TodoItem item : todoList) {
-                    if (item.getTask().equals(task)) {
-                        item.setCompleted(true);
-                        break;
-                    }
+        String action = request.getParameter("action");
+
+        if ("complete".equals(action) && task != null) {
+            // Đánh dấu công việc là hoàn thành
+            for (TodoItem item : todoList) {
+                if (item.getTask().equals(task)) {
+                    item.setCompleted(true);
+                    break;
                 }
-            } else {
-                // Thêm công việc mới
-                todoList.add(new TodoItem(task, false));
             }
+        } else if (task != null && !task.isEmpty()) {
+            // Thêm công việc mới
+            todoList.add(new TodoItem(task, false));
         }
+        // Chuyển hướng về trang todo
         response.sendRedirect(request.getContextPath() + "/todo");
     }
 
